@@ -20,18 +20,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/types', function () {
+Route::get('/enumerations.types.list', function () {
     return Type::all();
 });
 
-Route::get('/types/{type}', function (Type $type) {
-    return $type->value;
+Route::get('/enumerations.types.get/{type}', function (Type $type) {
+    return ['value' => $type->value];
 });
 
-Route::get('/conditions', function () {
+Route::get('/enumerations.conditions.list', function () {
     return Condition::all();
 });
 
-Route::get('/conditions/{condition}', function (Condition $condition) {
-    return $condition->value;
+Route::get('/enumerations.conditions.get/{condition}', function (Condition $condition) {
+    return ['value' => $condition->value];
 });

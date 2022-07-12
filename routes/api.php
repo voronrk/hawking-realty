@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Type;
 use App\Models\Condition;
 
+use App\Http\Controllers\TypeController;
+use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\WallmaterialController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,18 +24,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/enumerations.types.list', function () {
-    return Type::all();
-});
+Route::get('/enumerations.types.list', [TypeController::class, 'index']);
+Route::get('/enumerations.types.get/{type}', [TypeController::class, 'show']);
 
-Route::get('/enumerations.types.get/{type}', function (Type $type) {
-    return ['value' => $type->value];
-});
+Route::get('/enumerations.conditions.list', [ConditionController::class, 'index']);
+Route::get('/enumerations.conditions.get/{condition}', [ConditionController::class, 'show']);
 
-Route::get('/enumerations.conditions.list', function () {
-    return Condition::all();
-});
-
-Route::get('/enumerations.conditions.get/{condition}', function (Condition $condition) {
-    return ['value' => $condition->value];
-});
+Route::get('/enumerations.wallmaterials.list', [WallmaterialController::class, 'index']);
+Route::get('/enumerations.wallmaterials.get/{condition}', [WallmaterialController::class, 'show']);

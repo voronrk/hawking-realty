@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Models\Wallmaterial;
 
@@ -14,7 +15,11 @@ class WallmaterialController extends Controller
      */
     public function index()
     {
-        return Wallmaterial::all();
+        return Cache::store('file')->get('wallmaterials', function () {
+            $result = Wallmaterial::all();
+            Cache::store('file')->put('wallmaterials', $result, 600);
+            return $result;
+        });
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Models\Condition;
 
@@ -14,7 +15,11 @@ class ConditionController extends Controller
      */
     public function index()
     {
-        return Condition::all();
+        return Cache::store('file')->get('conditions', function () {
+            $result = Condition::all();
+            Cache::store('file')->put('conditions', $result, 600);
+            return $result;
+        });
     }
 
     /**

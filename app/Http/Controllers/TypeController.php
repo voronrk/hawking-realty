@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Models\Type;
 
@@ -14,7 +15,11 @@ class TypeController extends Controller
      */
     public function index()
     {
-        return Type::all();
+        return Cache::store('file')->get('types', function () {
+            $result = Type::all();
+            Cache::store('file')->put('types', $result, 600);
+            return $result;
+        });
     }
 
     /**

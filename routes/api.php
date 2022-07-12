@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Type;
+use App\Models\Condition;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +18,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/types', function () {
+    return Type::all();
+});
+
+Route::get('/types/{type}', function (Type $type) {
+    return $type->value;
+});
+
+Route::get('/conditions', function () {
+    return Condition::all();
+});
+
+Route::get('/conditions/{condition}', function (Condition $condition) {
+    return $condition->value;
 });

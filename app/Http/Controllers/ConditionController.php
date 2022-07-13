@@ -16,9 +16,9 @@ class ConditionController extends Controller
     public function index()
     {
         return Cache::store('file')->get('conditions', function () {
-            $result = Condition::all();
-            Cache::store('file')->put('conditions', $result);
-            return $result;
+            $data = Condition::all();
+            Cache::store('file')->put('conditions', $data);
+            return $data;
         });
     }
 
@@ -28,9 +28,14 @@ class ConditionController extends Controller
      * @param Condition $wallmaterial
      * @return \Illuminate\Http\Response
      */
-    public function show(Condition $condition)
+    public function show(Request $request)
     {
-        return ['value' => $condition->value];
+        return Cache::store('file')->get('conditions', function () {
+            $data = Condition::all();
+            Cache::store('file')->put('conditions', $data);
+            return $data;
+        })->firstWhere('id', $request->id);
+        // return ['value' => $condition->value];
     }
 
     /**
@@ -74,9 +79,14 @@ class ConditionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        $value = $request->value;
+        $result = Condition::where('id', $id)
+                        ->update(['value' => $value]);
+        if ($result) Cache::forget('conditions');
+        return ['result' => $result];
     }
 
     /**

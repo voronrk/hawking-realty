@@ -17,7 +17,7 @@ class WallmaterialController extends Controller
     {
         return Cache::store('file')->get('wallmaterials', function () {
             $result = Wallmaterial::all();
-            Cache::store('file')->put('wallmaterials', $result, 600);
+            Cache::store('file')->put('wallmaterials', $result);
             return $result;
         });
     }

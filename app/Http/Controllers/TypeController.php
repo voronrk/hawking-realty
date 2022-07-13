@@ -8,6 +8,12 @@ use App\Models\Type;
 
 class TypeController extends Controller
 {
+
+    public function clearCache()
+    {
+        return Cache::forget('types');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +22,9 @@ class TypeController extends Controller
     public function index()
     {
         return Cache::store('file')->get('types', function () {
-            $result = Type::all();
-            Cache::store('file')->put('types', $result, 600);
-            return $result;
+            $data = Type::all();
+            Cache::store('file')->put('types', $data);
+            return $data;
         });
     }
 
@@ -28,9 +34,13 @@ class TypeController extends Controller
      * @param Type $type
      * @return \Illuminate\Http\Response
      */
-    public function show(Type $type)
+    public function show(Request $request)
     {
-        return ['value' => $type->value];
+        return Cache::store('file')->get('types', function () {
+            $data = Type::all();
+            Cache::store('file')->put('types', $data);
+            return $data;
+        })->firstWhere('id', $request->id);
     }
 
     /**
@@ -71,12 +81,16 @@ class TypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        $value = $request->value;
+        $result = Type::where('id', $id)
+                        ->update(['value' => $value]);
+        if ($result) Cache::forget('types');
+        return ['result' => $result];
     }
 
     /**

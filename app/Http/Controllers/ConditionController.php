@@ -17,7 +17,7 @@ class ConditionController extends Controller
     {
         return Cache::store('file')->get('conditions', function () {
             $result = Condition::all();
-            Cache::store('file')->put('conditions', $result, 600);
+            Cache::store('file')->put('conditions', $result);
             return $result;
         });
     }

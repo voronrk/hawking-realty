@@ -88,8 +88,8 @@ class TypeController extends Controller
         $value = $request->value;
         $result = Type::where('id', $id)
                         ->update(['value' => $value]);
-        if ($result) Cache::store('memcached')->forget('types');
-        // if ($result) Cache::store('memcached')->tags(['permanent'])->forget('types');
+        // if ($result) Cache::store('memcached')->forget('types');
+        if ($result) Cache::store('memcached')->tags(['permanent'])->forget('types');
         return ['result' => $result];
     }
 

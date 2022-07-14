@@ -35,7 +35,6 @@ class ConditionController extends Controller
             Cache::store('file')->put('conditions', $data);
             return $data;
         })->firstWhere('id', $request->id);
-        // return ['value' => $condition->value];
     }
 
     /**

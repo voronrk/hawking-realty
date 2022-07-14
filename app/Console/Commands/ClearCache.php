@@ -12,7 +12,7 @@ class ClearCache extends Command
      *
      * @var string
      */
-    protected $signature = 'cache:clear {key}';
+    protected $signature = 'cache:clear {key} {driver}';
 
     /**
      * The console command description.
@@ -28,16 +28,15 @@ class ClearCache extends Command
      */
     public function handle()
     {   
-        
-        if (Cache::has($this->argument('key'))) {
-            $result = Cache::forget($this->argument('key'));
+        if (Cache::store($this->argument('driver'))->has($this->argument('key'))) {
+            $result = Cache::store($this->argument('driver'))->forget($this->argument('key'));
             if ($result) {
                 return $this->info("Cache by key '{$this->argument('key')}' cleared successfully");
             } else {
                 return $this->error('Something went wrong!');
             }
         } else {
-            return $this->error("Key '{$this->argument('key')}' not found!");
+            return $this->error("Key '{$this->argument('key')}' in the '{$this->argument('driver')}' not found!");
         }
         
     }

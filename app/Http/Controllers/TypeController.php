@@ -16,9 +16,11 @@ class TypeController extends Controller
      */
     public function index()
     {
-        return Cache::store('memcached')->get('types', function () {
+        // return Cache::store('memcached')->get('types', function () {
+        return Cache::store('memcached')->tags(['permanent'])->get('types', function () {
             $data = Type::all();
-            Cache::store('memcached')->put('types', $data);
+            // Cache::store('memcached')->put('types', $data);
+            Cache::store('memcached')->tags(['permanent'])->put('types', $data);
             return $data;
         });
     }
@@ -31,9 +33,11 @@ class TypeController extends Controller
      */
     public function show(Request $request)
     {
-        return Cache::store('memcached')->get('types', function () {
+        // return Cache::store('memcached')->get('types', function () {
+            return Cache::store('memcached')->tags(['permanent'])->get('types', function () {
             $data = Type::all();
-            Cache::store('memcached')->put('types', $data);
+            // Cache::store('memcached')->put('types', $data);
+            Cache::store('memcached')->tags(['permanent'])->put('types', $data);
             return $data;
         })->firstWhere('id', $request->id);
     }
@@ -85,6 +89,7 @@ class TypeController extends Controller
         $result = Type::where('id', $id)
                         ->update(['value' => $value]);
         if ($result) Cache::store('memcached')->forget('types');
+        // if ($result) Cache::store('memcached')->tags(['permanent'])->forget('types');
         return ['result' => $result];
     }
 

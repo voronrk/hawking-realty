@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+
 use App\Models\Type;
+use App\Events\BuildingPropertyAdded;
 
 class TypeController extends Controller
 {
@@ -60,10 +62,13 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $value = $request->value;
+        $result = Type::create([
+            'value' => $value,
+        ]);
+        BuildingPropertyAdded::dispatch($result);
+        return ['result' => $result->id];
     }
-
-
 
     /**
      * Show the form for editing the specified resource.

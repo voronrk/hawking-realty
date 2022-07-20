@@ -51,7 +51,11 @@ class WallmaterialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $value = $request->value;
+        $result = Type::create([
+            'value' => $value,
+        ]);
+        return ['result' => $result->id];
     }
 
 

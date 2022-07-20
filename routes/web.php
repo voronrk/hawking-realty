@@ -16,4 +16,4 @@ use App\Models\Type;
 
 Route::get('/', function () {
     return view('index', ['data' => 'Index']);
-});
+})->name('index');

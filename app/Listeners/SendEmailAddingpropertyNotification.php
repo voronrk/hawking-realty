@@ -5,6 +5,10 @@ namespace App\Listeners;
 use App\Events\BuildingPropertyAdded;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PropertyAdded;
 
 class SendEmailAddingpropertyNotification
 {
@@ -26,9 +30,13 @@ class SendEmailAddingpropertyNotification
      */
     public function handle(BuildingPropertyAdded $event)
     {
-        echo "<pre>";
-        echo print_r($event->type, true);
-        echo "</pre>";
-        die();
+        $value = $event->type->value;
+
+        try {
+            Mail::to(env('MAIL_TO_ADDRESS'))->send(new PropertyAdded($value));
+        } catch (Exception $e) {
+            Log::error('Ошибка отправки уведомления' . PHP_EOL . $e->getMessage());
+        }
+        
     }
 }
